@@ -11,6 +11,7 @@ import {
 export function DashboardLayout({DashboardBody, DashboardHeader, Sidebar}) {
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(false);
+
     return (
         <AppShell
             styles={{

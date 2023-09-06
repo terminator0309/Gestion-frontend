@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {createProject, getProject, getProjects} from "./projectThunk";
+import {createProject, getProject, getProjects, postComment} from "./projectThunk";
 
 const ProjectInitialState = {
     loading: false,
@@ -46,7 +46,26 @@ export const projectSlice = createSlice({
             })
             .addCase(createProject.rejected, () => {
                 console.log("CREATE PROJECT FAILED")
-            });
+            })
+
+            // POST COMMENT
+            .addCase(postComment.pending, (state) => {state.loading = true})
+            .addCase(postComment.fulfilled, (state, action) => {
+                state.loading = false;
+                let projectId = action.payload.projectId;
+
+                state.projects = state.projects.map(project =>
+                    project._id === projectId
+                        ? {
+                            ...project,
+                            cards: project.cards.map(card =>
+                                card._id === action.payload.card._id ? {...action.payload.card} : card
+                            )
+                        }
+                        : project
+                )
+            })
+            .addCase(postComment.rejected, () => console.log("POST COMMENT FAILED"))
     },
 });
 

@@ -14,6 +14,10 @@ export const getProject = createAsyncThunk("project/getProject", async (projectI
 
 export const createProject = createAsyncThunk("project/createProject", async (project) => {
     const response = await client.post("project/create", {},{headers: getAuthHeader(), params: {...project}});
-    console.log(response.data);
     return response.data;
+})
+
+export const postComment = createAsyncThunk("project/postComment", async (comment) => {
+    const response = await client.post("card/postComment", {...comment}, {headers: getAuthHeader()});
+    return {card: response.data, projectId: comment.projectId};
 })
